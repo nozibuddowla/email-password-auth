@@ -1,11 +1,19 @@
 import React from "react";
+import { auth } from "../../firebase/firebase";
+import { createUserWithEmailAndPassword } from "firebase/auth";
 
 const Register = () => {
   const handleRegister = (event) => {
     event.preventDefault();
     const email = event.target.email.value;
     const password = event.target.password.value;
-    console.log(email, password);
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((result) => console.log(` after creation of a new user ${result.user}`))
+      .catch((error) => {
+        console.log(error);
+        console.log(error.code);
+        console.log(error.message);
+      });
   };
   return (
     <div className="hero bg-base-200 min-h-screen">
