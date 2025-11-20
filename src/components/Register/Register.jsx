@@ -34,12 +34,14 @@ const Register = () => {
     const emailErrors = [];
     const passwordErrors = [];
 
+    // Email validation
     if (!emailValue) emailErrors.push("Email is required");
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (emailValue && !emailPattern.test(emailValue))
       emailErrors.push("Invalid email address");
 
+    // Password validation
     if (!password) passwordErrors.push("Password is required");
     if (password && password.length < 8)
       passwordErrors.push(
@@ -48,18 +50,22 @@ const Register = () => {
     const passwordPattern =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
     if (password && !passwordPattern.test(password))
-      passwordErrors.push("Password is too weak");
+      passwordErrors.push(
+        "Password must include uppercase, lowercase, number and special character"
+      );
 
+    // Terms validation
     if (!acceptTerms) {
       setTermsError("You must accept the Terms and Conditions");
     }
 
     if (emailErrors.length > 0) {
-      setEmailError(emailErrors.join(`. `));
-      return;
+      setEmailError(emailErrors.join(". "));
     }
     if (passwordErrors.length > 0) {
-      setPasswordError(passwordErrors.join(`. `));
+      setPasswordError(passwordErrors.join(". "));
+    }
+    if (emailErrors.length > 0 || passwordErrors.length > 0 || !acceptTerms) {
       return;
     }
 
@@ -75,7 +81,7 @@ const Register = () => {
     } catch (error) {
       // friendly mapping
       if (error?.code === "auth/email-already-in-use")
-        setSignupError("Email is already registered");
+        setSignupError("This email is already registered. Try logging in.");
       else if (error?.code === "auth/weak-password")
         setSignupError("Provided password is too weak");
       else setSignupError("Registration failed. Please try again.");
@@ -90,6 +96,13 @@ const Register = () => {
     setShowPassword(!showPassword);
   };
 
+  const handleTermsChange = (checked) => {
+    setAcceptTerms(checked);
+    if (checked) {
+      setTermsError("");
+    }
+  };
+
   return (
     <div className="hero bg-base-200 min-h-screen">
       <div className="hero-content flex-col lg:flex-row-reverse">
@@ -98,9 +111,10 @@ const Register = () => {
         </div>
         <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
           <div className="card-body">
-            <form className="space-y-4" onSubmit={handleRegister}>
+            <form className="space-y-4" onSubmit={handleRegister} noValidate>
               <label className="label">Email</label>
               <input
+                id="email"
                 type="email"
                 name="email"
                 className="input"
@@ -112,12 +126,15 @@ const Register = () => {
               />
 
               {emailError && (
-                <p className="text-red-500 font-bold text-xl">{emailError}</p>
+                <p id="email-error" className="text-red-500 font-bold text-sm">
+                  {emailError}
+                </p>
               )}
 
               <label className="label">Password</label>
               <div className="relative">
                 <input
+                  id="password"
                   type={showPassword ? "text" : "password"}
                   name="password"
                   className="input"
@@ -140,7 +157,10 @@ const Register = () => {
               </div>
 
               {passwordError && (
-                <p className="text-red-500 font-bold text-xl">
+                <p
+                  id="password-error"
+                  className="text-red-500 font-bold text-sm"
+                >
                   {passwordError}
                 </p>
               )}
@@ -153,7 +173,7 @@ const Register = () => {
                       type="checkbox"
                       className="checkbox"
                       checked={acceptTerms}
-                      onChange={(e) => setAcceptTerms(e.target.checked)}
+                      onChange={(e) => handleTermsChange(e.target.checked)}
                       aria-invalid={!!termsError}
                       aria-describedby={termsError ? "terms-error" : undefined}
                     />
@@ -175,17 +195,17 @@ const Register = () => {
                 <a className="link link-hover"> Forgot password? </a>
               </div>
 
-              <fieldset disabled={loading}>
-                <button className="btn btn-neutral mt-4">
+              <fieldset className="flex justify-center items-center" disabled={loading}>
+                <button type="submit" className="btn btn-neutral mt-4">
                   {loading ? "Registering..." : "Register"}
                 </button>
               </fieldset>
 
               {signupError && (
-                <p className="text-red-500 font-bold text-xl">{signupError}</p>
+                <p className="text-red-500 font-bold text-sm">{signupError}</p>
               )}
               {signupSuccess && (
-                <p className="text-green-500 font-bold text-xl">
+                <p className="text-green-500 font-bold text-sm">
                   Account created successfully!
                 </p>
               )}
