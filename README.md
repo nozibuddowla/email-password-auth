@@ -1,16 +1,96 @@
-# React + Vite
+# **MCQ Answers – Firebase Authentication & React Basics**
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### **Question 01**
 
-Currently, two official plugins are available:
+**What event handler detects a click outside of the input field?**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+✔ **Answer:** `onBlur`
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### **Question 02**
 
-## Expanding the ESLint configuration
+**Firebase Authentication requires a password of at least ____**
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+✔ **Answer:** Six characters
+
+---
+
+### **Question 03**
+
+**Which method should you call to stop a `<form>` tag from reloading the page?**
+
+✔ **Answer:** `e.preventDefault()`
+
+---
+
+### **Question 04**
+
+**What should you import when a user signs into your app using email and password?**
+
+✔ **Answer:**
+
+```js
+import { signInWithEmailAndPassword } from "firebase/auth";
+```
+
+---
+
+### **Question 05**
+
+**Which one is true?**
+
+✔ **Answer:** All the above
+(Firebase provides Hosting, Authentication, and Database)
+
+---
+
+### **Question 06**
+
+**Which is the correct Regular Expression to check if a string contains at least one uppercase English alphabet?**
+
+✔ **Answer:**
+
+```
+^.*?[A-Z].*?$
+```
+
+---
+
+### **Question 07**
+
+**Which file contains information about installed npm packages?**
+
+✔ **Answer:** `package.json`
+
+---
+
+### **Question 08**
+
+**Which method will you use to create an account with email and password?**
+
+✔ **Answer:** `createUserWithEmailAndPassword`
+
+---
+
+### **Question 09**
+
+**Which React hook is commonly used for managing authentication state globally?**
+
+✔ **Answer:** `useContext`
+
+---
+
+### **Question 10**
+
+**Which one is the true statement?**
+
+```js
+const bird = { size: 'small' };
+const mouse = { name: 'Mickey', small: true };
+```
+
+✔ **Answer:**
+`mouse.bird.size` is **not valid**
+
+---
