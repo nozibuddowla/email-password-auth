@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { auth } from "../../firebase/firebase";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
 import { LuEye, LuEyeClosed } from "react-icons/lu";
+import { Link } from "react-router";
 
 const Register = () => {
   // form input states
@@ -72,12 +76,21 @@ const Register = () => {
     setLoading(true);
 
     try {
-      await createUserWithEmailAndPassword(auth, emailValue, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        emailValue,
+        password
+      );
       setSignupSuccess(true);
       setEmail("");
       setPassword("");
       setAcceptTerms(false);
       setSignupError("");
+      console.log(userCredential.user);
+      // send verification email
+      sendEmailVerification(userCredential.user).then(() => {
+        alert("Please login to your email and verify your email address");
+      });
     } catch (error) {
       // friendly mapping
       if (error?.code === "auth/email-already-in-use")
@@ -171,6 +184,7 @@ const Register = () => {
                     <input
                       id="acceptTerms"
                       type="checkbox"
+                      name="acceptTerms"
                       className="checkbox"
                       checked={acceptTerms}
                       onChange={(e) => handleTermsChange(e.target.checked)}
@@ -191,11 +205,10 @@ const Register = () => {
                 </fieldset>
               </div>
 
-              <div className="flex justify-center items-center">
-                <a className="link link-hover"> Forgot password? </a>
-              </div>
-
-              <fieldset className="flex justify-center items-center" disabled={loading}>
+              <fieldset
+                className="flex justify-center items-center"
+                disabled={loading}
+              >
                 <button type="submit" className="btn btn-neutral mt-4">
                   {loading ? "Registering..." : "Register"}
                 </button>
@@ -210,6 +223,12 @@ const Register = () => {
                 </p>
               )}
             </form>
+            <p>
+              Already have an account? Please,{" "}
+              <Link to="/login" className="link link-primary">
+                Login
+              </Link>{" "}
+            </p>
           </div>
         </div>
       </div>
