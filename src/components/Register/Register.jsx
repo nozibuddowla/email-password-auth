@@ -3,6 +3,7 @@ import { auth } from "../../firebase/firebase";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  updateProfile,
 } from "firebase/auth";
 import { LuEye, LuEyeClosed } from "react-icons/lu";
 import { Link } from "react-router";
@@ -25,6 +26,11 @@ const Register = () => {
 
   const handleRegister = async (event) => {
     event.preventDefault();
+    const name = event.target.name.value;
+    const photo = event.target.photo.value;
+    console.log(
+      `register click ${email}, ${password}, ${acceptTerms}, ${name}, ${photo} `
+    );
 
     // reset previous messages
     setSignupError("");
@@ -82,11 +88,23 @@ const Register = () => {
         password
       );
       setSignupSuccess(true);
+      event.target.reset();
       setEmail("");
       setPassword("");
       setAcceptTerms(false);
       setSignupError("");
       console.log(userCredential.user);
+
+      // update user profile
+      const profile = {
+        displayName: name,
+        photoURL: photo,
+      };
+      updateProfile(userCredential.user, profile)
+        .then(console.log(profile.displayName, profile.photoURL))
+        .catch((error) => {
+          console.log(error);
+        });
       // send verification email
       sendEmailVerification(userCredential.user).then(() => {
         alert("Please login to your email and verify your email address");
@@ -125,6 +143,15 @@ const Register = () => {
         <div className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl">
           <div className="card-body">
             <form className="space-y-4" onSubmit={handleRegister} noValidate>
+              {/* user name */}
+              <label className="label">Name</label>
+              <input
+                type="text"
+                name="name"
+                className="input"
+                placeholder="your name"
+              />
+              {/* email */}
               <label className="label">Email</label>
               <input
                 id="email"
@@ -177,6 +204,14 @@ const Register = () => {
                   {passwordError}
                 </p>
               )}
+
+              <label className="label">Photo URL</label>
+              <input
+                type="text"
+                name="photo"
+                className="input"
+                placeholder="Photo URL"
+              />
 
               <div>
                 <fieldset className="fieldset">
